@@ -1,0 +1,5 @@
+{"rows":[
+{"key":{"weather":"all weather"},"value":{"negative":70863,"neutral":231844,"positive":154508}},
+{"key":{"weather":"raining"},"value":{"negative":22159,"neutral":72471,"positive":49093}},
+{"key":{"weather":"sunny"},"value":{"negative":48704,"neutral":159373,"positive":105415}}
+]}

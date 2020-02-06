@@ -1,0 +1,4 @@
+{"rows":[
+{"key":"all_tweets","value":{"negative":70863,"neutral":231844,"positive":154508}},
+{"key":"mention_police","value":{"negative":146,"neutral":195,"positive":157}}
+]}

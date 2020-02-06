@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+        <title>Aurin data plotter</title>
+        <style>
+            html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
+
+
+            .stacked-bar-graph {
+                width: 100%;
+                height: 38px;
+            / / background: #eee;
+                color: #414042;
+            }
+
+            span {
+                display: inline-block;
+                height: 100%;
+                box-sizing: border-box;
+                float: left;
+            / / color: #fff;
+                font-weight: bold;
+                font-family: arial, sans-serif;
+                padding: 10px;
+            }
+
+            .bar-1 {
+                background: #F7B334;
+            }
+
+            .bar-2 {
+                background: #A7A9AC;
+            }
+
+            .bar-3 {
+                background: #D57E00;
+            }
+
+
+
+
+
+
+            #map {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+
+            #map2 {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+
+
+            .nicebox {
+                position: absolute;
+                text-align: right;
+                font-family: "Roboto", "Arial", sans-serif;
+                font-size: 14px;
+                z-index: 5;
+                box-shadow: 0 4px 6px -4px #333;
+                padding: 5px 10px;
+                background: rgb(255,255,255);
+                background: linear-gradient(to bottom,rgba(255,255,255,1) 0%,rgba(245,245,245,1) 100%);
+                border: rgb(229, 229, 229) 1px solid;
+            }
+            .textbox {
+                position: absolute;
+                text-align: left;
+                font-family: "Roboto", "Arial", sans-serif;
+                font-size: 14px;
+                z-index: 5;
+                padding: 5px 10px;
+                background: none;
+            }
+            #legendBox {
+                top: 130px;
+                left: 10px;
+                width: 90px;
+                height: 300px;
+            }
+            #textBox {
+                top: 130px;
+                left: 45px;
+                width: 55px;
+                height: 330px;
+            }
+            #data-box {
+                top: 89px;
+                left: 130px;
+                height: 45px;
+                line-height: 45px;
+                display: none;
+            }
+            #legend {
+                display: flex;
+                display: -webkit-box;
+                height: 300px;
+                width: 28px;
+                }
+
+            .color-key {
+                background: linear-gradient(to bottom,
+                hsl(236, 78%, 64%) 0%,
+                hsl(257, 76%, 62%) 17%,
+                hsl(277, 75%, 61%) 33%,
+                hsl(298, 74%, 59%) 50%,
+                hsl(319, 72%, 57%) 67%,
+                hsl(339, 71%, 56%) 83%,
+                hsl(360, 69%, 54%) 100%);
+                flex: 1;
+                -webkit-box-flex: 1;
+                margin: 0 5px;
+                text-align: left;
+                font-size: 1.0em;
+                line-height: 1.0em;
+            }
+            /* Style tab links */
+            .tablink {
+                background-color: #3c3b39;
+                border: none;
+                color: white;
+                float: left;
+                outline: none;
+                cursor: pointer;
+                padding: 10px 16px;
+                font-size: 17px;
+                width: 25%;
+            }
+
+            .tablink:hover {
+                background-color: #777;
+            }
+
+            .databutton {
+                background-color: #49629c;
+                border: none;
+                color: white;
+                float:left;
+                outline: none;
+                cursor: pointer;
+                padding: 10px 16px;
+                font-size: 17px;
+                width: 16.666666%;
+            }
+
+            .databutton:hover {
+                background-color: #777;
+            }
+
+            .keyworddatabutton {
+                background-color: #068a85;
+                border: none;
+                color: white;
+                float:left;
+                outline: none;
+                cursor: pointer;
+                padding: 10px 16px;
+                font-size: 17px;
+                width: 25%;
+            }
+
+            .keyworddatabutton:hover {
+                background-color: #777;
+            }
+
+            /* Style the tab content (and add height:100% for full page content) */
+            .tabcontent {
+                color: black;
+                display: none;
+                padding: 40px 0;
+                height: calc(100% - 80px);
+            }
+            #data-value { font-size: 2.0em; font-weight: bold }
+            #data-label { font-size: 2.0em; font-weight: normal; padding-right: 10px; }
+            #data-label:after { content: ':' }
+            #data-caret { margin-left: -5px; padding-left: 5px; display: none; font-size: 23px; width: 14px; color: black}
+
+            .legend-text {padding-top:54px}
+
+            #Aurintab {background-color: #49629c;}
+            #Keywordtab {background-color: #068a85;}
+            #Graph {background-color: white;}
+            #unused {background-color: #5f0404;}
+
+        </style>
+    </head>
+    <body>
+        <button class="tablink" href="index.html"  onclick="window.location.href='index.html'" >Home Page</button>
+        <button class="tablink" onclick="openPage('Keywordtab', this, '#075b55','map2')">Transport Talks</button>
+        <button class="tablink" >..</button>
+        <button class="tablink" >..</button>
+
+        <div id="Aurintab" class="tabcontent">
+            <div id="legendBox" class="nicebox">
+
+                <div id="legend">
+                    <div class="color-key"><span id="data-caret">&#x25c6;</span></div>
+                </div>
+
+            </div>
+
+            <div id="textBox" class="textbox">
+                <div id="data-min">min</div>
+                <div id="data-25pc" class="legend-text"> .</div>
+                <div id="data-50pc" class="legend-text"> .</div>
+                <div id="data-75pc" class="legend-text"> .</div>
+                <div id="data-max" class="legend-text">max</div>
+            </div>
+            <button class="databutton" onclick="aurinButtons(box1, this, '#21315b')">Total People</button>
+            <button class="databutton" onclick="aurinButtons(box2, this, '#21315b')">Total Married</button>
+            <button class="databutton" onclick="aurinButtons(box3, this, '#21315b')">Total Never Married</button>
+            <button class="databutton" onclick="nectarButtons(box4,'negative', this, '#21315b')">Negative%</button>
+            <button class="databutton" onclick="nectarButtons(box4,'positive', this, '#21315b')">Positive%</button>
+            <button class="databutton" onclick="nectarButtons(box4,'neutral', this, '#21315b')">Neutral%</button>
+            <div id="data-box" class="nicebox">
+                <label id="data-label" for="data-value"></label>
+                <span id="data-value"></span>
+            </div>
+
+            <div id="map"></div>
+        </div>
+
+        <div id="Keywordtab" class="tabcontent">
+             
+            <button class="keyworddatabutton" onclick="add_heatmap(pub_trans,0)" >Pub Trans Negative</button>
+            <button class="keyworddatabutton" onclick="add_heatmap(pub_trans,1)" >Pub Trans Positive</button>
+            <button class="keyworddatabutton" onclick="add_heatmap(pub_trans,2)" >Pub Trans Neutral</button>
+            
+ 
+             
+            <div id="map2"></div>
+        </div>
+
+        <div id="Graph" class="tabcontent">
+            <h3>sentiment in all tweets</h3>
+            <div class="stacked-bar-graph">
+                <span id="all_neu" class="bar-1">Neutral</span>
+                <span id="all_pos" style="width:1%" class="bar-2">Positive</span>
+                <span id="all_neg" style="width:1%" class="bar-3">Negative</span>
+            </div>
+            <h3>sentiment in tweets mentioning police</h3>
+            <div class="stacked-bar-graph">
+                <span id="police_neu"  class="bar-1">Neutral</span>
+                <span id="police_pos"  class="bar-2">Positive</span>
+                <span id="police_neg"  class="bar-3">Negative</span>
+            </div>
+            <h3>sentiment in tweets on rainy days</h3>
+            <div class="stacked-bar-graph">
+                <span id="rainy_neu"  class="bar-1">Neutral</span>
+                <span id="rainy_pos" class="bar-2">Positive</span>
+                <span id="rainy_neg"  class="bar-3">Negative</span>
+            </div>
+
+            <h3>sentiment in tweets on sunny days</h3>
+            <div class="stacked-bar-graph">
+                <span id="sunny_neu"  class="bar-1">Neutral</span>
+                <span id="sunny_pos"  class="bar-2">Positive</span>
+                <span id="sunny_neg"  class="bar-3">Negative</span>
+            </div>
+        </div>
+
+        <div id="unused" class="tabcontent">
+        </div>
+
+        <script src="../cluster_script.js"></script>
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBe0V7f-KFrbBPNZ1fsbRSNEKVeLGjTsxg&libraries=visualization&callback=initMap">
+        </script>
+    </body>
+</html>
+

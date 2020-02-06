@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+        <title>Aurin data plotter</title>
+		<link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <style>
+            html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
+			
+			.stacked-bar-graph {
+                width: 100%;
+                height: 38px;
+            / / background: #eee;
+                color: #414042;
+            }
+
+            span {
+                display: inline-block;
+                height: 100%;
+                box-sizing: border-box;
+                float: left;
+            / / color: #fff;
+                font-weight: bold;
+                font-family: arial, sans-serif;
+                padding: 10px;
+            }
+
+            .bar-1 {
+                background: #F7B334;
+            }
+
+            .bar-2 {
+                background: #A7A9AC;
+            }
+
+            .bar-3 {
+                background: #D57E00;
+            }
+			
+			
+            #map {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+			
+			 #map2 {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+			
+            .nicebox {
+                position: absolute;
+                text-align: right;
+                font-family: "Roboto", "Arial", sans-serif;
+                font-size: 14px;
+                z-index: 5;
+                box-shadow: 0 4px 6px -4px #333;
+                padding: 5px 10px;
+                background: rgb(255,255,255);
+                background: linear-gradient(to bottom,rgba(255,255,255,1) 0%,rgba(245,245,245,1) 100%);
+                border: rgb(229, 229, 229) 1px solid;
+            }
+            .textbox {
+                position: absolute;
+                text-align: left;
+                font-family: "Roboto", "Arial", sans-serif;
+                font-size: 14px;
+                z-index: 5;
+                padding: 5px 10px;
+                background: none;
+            }
+            #legendBox {
+                top: 130px;
+                left: 10px;
+                width: 90px;
+                height: 300px;
+            }
+            #textBox {
+                top: 130px;
+                left: 45px;
+                width: 55px;
+                height: 330px;
+            }
+            #data-box {
+                top: 89px;
+                left: 130px;
+                height: 50px;
+                line-height: 45px;
+                display: none;
+            }
+            #legend {
+                display: flex;
+                display: -webkit-box;
+                height: 290px;
+                width: 28px;
+                }
+
+            .color-key {
+                background: linear-gradient(to bottom,
+                hsl(236, 78%, 64%) 0%,
+                hsl(257, 76%, 62%) 17%,
+                hsl(277, 75%, 61%) 33%,
+                hsl(298, 74%, 59%) 50%,
+                hsl(319, 72%, 57%) 67%,
+                hsl(339, 71%, 56%) 83%,
+                hsl(360, 69%, 54%) 100%);
+                flex: 1;
+                -webkit-box-flex: 1;
+                margin: 0 5px;
+                text-align: left;
+                font-size: 1.0em;
+                line-height: 1.0em;
+            }
+            /* Style tab links */
+            .tablink {
+                background-color: #3c3b39;
+                border: none;
+                color: white;
+                float: left;
+                outline: none;
+                cursor: pointer;
+                padding: 10px 16px;
+                font-size: 17px;
+                width: 33.333%;
+            }
+
+            .tablink:hover {
+                background-color: #777;
+            }
+
+            .databutton {
+                background-color: #49629c;
+                border: none;
+                color: white;
+                float:left;
+                outline: none;
+                cursor: pointer;
+                padding: 10px 16px;
+                font-size: 17px;
+                width: 25%;
+            }
+
+            .databutton:hover {
+                background-color: #777;
+            }
+
+            /* Style the tab content (and add height:100% for full page content) */
+            .tabcontent {
+                color: black;
+                display: none;
+                padding: 40px 0;
+                height: calc(100% - 80px);
+            }
+            #data-value { font-size: 2.0em; font-weight: bold }
+            #data-label { font-size: 2.0em; font-weight: normal; padding-right: 1px; }
+            #data-label:after { content: ':' }
+            #data-caret { margin-left: -5px; padding-left: 5px; display: none; font-size: 23px; width: 14px; color: black}
+
+            .legend-text {padding-top:47px}
+
+            #Maptab {background-color: white;}
+            #Graph {background-color: white;}
+            #unused {background-color: #5f0404;}
+			
+			
+			#Aurintab {background-color: #49629c;}
+            #Keywordtab {background-color: #068a85;}
+
+        </style>
+    </head>
+    <body>
+        <button   onclick="openPage('Maptab', this, '#21315b')" id="defaultOpen">Map</button>
+        <button   onclick="openPage('Graph', this, '#205a2b')">Graph</button>
+        <button   onclick="openPage('unused', this, '#5f0404')">...</button>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+			<div class="container">
+				<a class="navbar-brand" href="#">SubUrb wise sentiment data plot</a>
+			</div>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+			  <ul class="navbar-nav ml-auto">
+				<li class="nav-item active">
+					<a href="index.html" type="button" class="btn btn-success" onclick="aurinButtons(box2, this, '#21315b')" style="margin-left: 10px;">Home Page</a>
+				</li>
+			  </ul>
+			</div>
+		</nav>
+        <div id="Maptab" class="tabcontent">
+            <div id="legendBox" class="nicebox" >
+		
+                <div id="legend" style="font-color: white;  " >
+                    <div class="color-key"><span id="data-caret">&#x25c6;</span></div>
+                </div>
+
+            </div>
+
+            <div id="textBox" class="textbox">
+                <div id="data-min">min</div>
+                <div id="data-25pc" class="legend-text">.</div>
+                <div id="data-50pc" class="legend-text">.</div>
+                <div id="data-75pc" class="legend-text">.</div>
+                <div id="data-max" class="legend-text">max</div>
+            </div>
+
+            <div id="data-box" class="nicebox" style="border: 1px solid black;" >
+                <label id="data-label" for="data-value" ></label>
+                <span id="data-value"  style="margin-top: -10px;"></span>
+            </div>
+            <div id="map"></div>
+        </div>
+
+        <div id="Graph" class="tabcontent">
+            <h3>Graph</h3>
+            <p>This is where a graph can go</p>
+        </div>
+
+        <div id="unused" class="tabcontent">
+            <h3>Not in use yet</h3>
+        </div>
+
+        <script src="../cluster_script.js"></script>
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBe0V7f-KFrbBPNZ1fsbRSNEKVeLGjTsxg&callback=initMap">
+        </script>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-bottom">
+		  <div class="container">
+			<a class="navbar-brand" href="#">Please select your options >></a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+			  <span class="navbar-toggler-icon">asdsasasd</span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarResponsive">
+			  <ul class="navbar-nav ml-auto">
+				<li class="nav-item active">
+					<button type="button" class="btn btn-success" onclick="nectarButtons(sentimentjson,'negative', this, '#21315b')" style="margin-left: 10px;">Negative</button>
+				</li>
+				<li class="nav-item">
+				  <button type="button" class="btn btn-info" onclick="nectarButtons(sentimentjson, 'positive', this, '#21315b')" style="margin-left: 10px;">Positive</button>
+				</li>
+				<li class="nav-item">
+				  <button type="button" class="btn btn-warning" onclick="nectarButtons(sentimentjson,'neutral', this, '#21315b')"  style="margin-left: 10px;">Neutral</button>
+				</li>x`	
+				<li class="nav-item">
+				  <a type="button" class="btn btn-danger"  style="margin-left: 10px;" href="suburb_sentiment_graph.php">Graph Representation</a>
+				</li>
+			  </ul>
+			</div>
+		  </div>
+		</nav>
+    </body>
+</html>
+
