@@ -1,0 +1,24 @@
+---
+- name: install pip 3
+  apt:
+    name: python3-pip
+    update_cache: yes
+    state: present
+
+- name: get couchdb repository
+  shell: echo "deb https://apache.bintray.com/couchdb-deb xenial main"     | sudo tee -a /etc/apt/sources.list
+
+- name: install couchdb repository
+  shell: curl -L https://couchdb.apache.org/repo/bintray-pubkey.asc     | sudo apt-key add -
+
+- name: update packages
+  apt:
+    update_cache: yes
+    upgrade: yes
+- name: install couchdb
+  apt: name=couchdb
+
+- name: pip3 install tweepy
+  command: pip3 install tweepy textblob shapely
+
+- include: configure_cluster.yaml

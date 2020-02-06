@@ -1,0 +1,36 @@
+---
+- name: replace ip address
+  replace:
+   dest: /opt/couchdb/etc/vm.args
+   regexp: '^-name couchdb@127.0.0.1'
+   replace: '-name couchdb@{{ ansible_default_ipv4.address }}'
+
+- name: set cookie
+  replace:
+   dest: /opt/couchdb/etc/vm.args
+   regexp: '^-setcookie monster$'
+   replace: '-setcookie {{COOKIE}}'
+
+- name: Bind Cluster Address to Public
+  lineinfile:
+   dest: /opt/couchdb/etc/local.ini
+   insertafter: '^\[httpd\]$'
+   line: 'bind_address = 0.0.0.0'
+
+- name: Add Admin User
+  lineinfile:
+   dest: /opt/couchdb/etc/local.ini
+   insertafter: '^\[admins\]$'
+   line: 'admin = {{PASSWORD}}'
+
+- name: restart couchdb
+  shell: service couchdb restart
+  sudo: yes
+
+- include: add_nodes.yaml
+
+
+
+
+
+
